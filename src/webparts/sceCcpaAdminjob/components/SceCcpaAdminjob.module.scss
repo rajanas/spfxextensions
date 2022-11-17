@@ -1,0 +1,21 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.sceCcpaAdminjob {
+  overflow: hidden;
+  padding: 1em;
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
+  &.teams {
+    font-family: $ms-font-family-fallbacks;
+  }
+  .accessToken{
+    padding: 15px;
+  }
+
+}
+.accessToken{
+  padding: 15px;
+}
+
+
+

@@ -1,0 +1,32 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "initialPage": "https://aarainternationalinc.sharepoint.com/sites/socaledison/Lists/CPRA_HR/AllItems.aspx",
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://aarainternationalinc.sharepoint.com/sites/socaledison/Lists/CPRA_HR/AllItems.aspx",
+      "customActions": {
+        "76cfc590-5ab0-423a-ae72-1281e1df20d8": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "sampleTextOne": "One item is selected in the list",
+            "sampleTextTwo": "This command is always visible."
+          }
+        }
+      }
+    },
+    "sceCcpaAdminjobDecryptlistitem": {
+      "pageUrl": "https://aarainternationalinc.sharepoint.com/sites/socaledison/Lists/CPRA_HR/AllItems.aspx",
+      "customActions": {
+        "76cfc590-5ab0-423a-ae72-1281e1df20d8": {
+          "location": "ClientSideExtension.ListViewCommandSet.CommandBar",
+          "properties": {
+            "sampleTextOne": "One item is selected in the list",
+            "sampleTextTwo": "This command is always visible."
+          }
+        }
+      }
+    }
+  }
+}

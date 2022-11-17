@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "sce-ccpa-adminjob-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/sceCcpaAdminjob/SceCcpaAdminjobWebPart.js",
+          "manifest": "./src/webparts/sceCcpaAdminjob/SceCcpaAdminjobWebPart.manifest.json"
+        }
+      ]
+    },
+    "sce-ccpa-adminjob-decryptlistitem-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/sceCcpaAdminjobDecryptlistitem/SceCcpaAdminjobDecryptlistitemCommandSet.js",
+          "manifest": "./src/extensions/sceCcpaAdminjobDecryptlistitem/SceCcpaAdminjobDecryptlistitemCommandSet.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "SceCcpaAdminjobWebPartStrings": "lib/webparts/sceCcpaAdminjob/loc/{locale}.js",
+    "SceCcpaAdminjobDecryptlistitemCommandSetStrings": "lib/extensions/sceCcpaAdminjobDecryptlistitem/loc/{locale}.js"
+  }
+}

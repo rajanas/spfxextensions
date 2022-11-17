@@ -1,0 +1,17 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "version": "1.15.2",
+    "libraryName": "sce-ccpa-admin-job",
+    "libraryId": "5662efaf-2556-4888-acd3-ce850374afef",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "sce-ccpa-admin-job",
+    "solutionShortDescription": "sce-ccpa-admin-job description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "extension",
+    "extensionType": "ListViewCommandSet"
+  }
+}

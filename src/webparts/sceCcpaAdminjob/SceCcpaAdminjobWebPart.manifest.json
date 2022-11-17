@@ -1,0 +1,42 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "00173cbd-77d9-4a0a-b50b-bd417864adac",
+  "alias": "SceCcpaAdminjobWebPart",
+  "componentType": "WebPart",
+  // The "*" signifies that the version should be taken from the package.json
+  "version": "*",
+  "manifestVersion": 2,
+  // If true, the component can only be installed on sites where Custom Script is allowed.
+  // Components that allow authors to embed arbitrary script code should set this to true.
+  // https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart",
+    "TeamsPersonalApp",
+    "TeamsTab",
+    "SharePointFullPage"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
+      "group": {
+        "default": "SPFX Custom Dev"
+      },
+      "title": {
+        "default": "sce.ccpa.adminjob"
+      },
+      "description": {
+        "default": "sce.ccpa.adminjob description"
+      },
+      "officeFabricIconFontName": "Page",
+      "properties": {
+        "description": "sce.ccpa.adminjob",
+        "clientID": "c134bd2a-ffe5-4fea-8c87-d20de7f29754",
+        "authorityUrl": "https://login.microsoftonline.com/4c20a308-8b26-408c-9d08-b884a95f8b73",
+        "redirectURL": "https://aarainternationalinc.sharepoint.com/sites/socaledison/_layouts/15/workbench.aspx",
+        "scopes":"https://graph.microsoft.com/User.Read"
+      }
+    }
+  ]
+}

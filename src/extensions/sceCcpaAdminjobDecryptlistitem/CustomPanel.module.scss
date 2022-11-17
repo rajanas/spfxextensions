@@ -1,0 +1,24 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.customPanel {
+ 
+  padding: 20px;
+  .header{
+    font-size: large;
+  }
+  .seperator{
+    color:black
+    
+  }
+  .item{
+    padding:10px;
+    .fieldLabel{
+      font-weight: 300;
+      font-size: medium;
+
+    }
+  }
+}
+
+
+

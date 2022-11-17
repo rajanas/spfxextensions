@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "sce-ccpa-admin-job-client-side-solution",
+    "id": "5662efaf-2556-4888-acd3-ce850374afef",
+    "version": "1.2.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "sce-ccpa-admin-job description"
+      },
+      "longDescription": {
+        "default": "sce-ccpa-admin-job description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "sce-ccpa-admin-job Feature",
+        "description": "The feature that activates elements of the sce-ccpa-admin-job solution.",
+        "id": "848593ed-144d-495b-87e9-87854f14a506",
+        "version": "1.2.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/sce-ccpa-admin-job.sppkg"
+  }
+}
