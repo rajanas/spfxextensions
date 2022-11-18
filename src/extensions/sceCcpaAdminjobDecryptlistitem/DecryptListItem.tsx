@@ -11,17 +11,17 @@ import {
 import { ExtensionContext } from '@microsoft/sp-extension-base';
 import panelstyles from './CustomPanel.module.scss';
 import { Label } from 'office-ui-fabric-react';
-import DecryptService from './services/DecryptService';
+import DecryptService, { IDecryptReqObject } from './services/DecryptService';
 
-import { globalVariables, IReqObject } from './services/Constants';
+import { globalVariables, IReqObject, IDecryptObject } from './services/Constants';
 
 export interface IDecryptListItemProps {
     decryptService: DecryptService;
 }
 
 export interface IDecryptListItemState {
-    decryptObject: IReqObject;
-    accessToken:string;
+    decryptObject: IDecryptObject;
+    accessToken: string;
 }
 
 
@@ -36,25 +36,21 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
     constructor(props: IDecryptListItemProps) {
         super(props);
         this.state = {
-            decryptObject: {} as IReqObject,
-            accessToken:""
+            decryptObject: {} as IDecryptObject,
+            accessToken: ""
         }
     }
 
-    componentDidMount(): void {      
-      
+    componentDidMount(): void {
+
         this.getGraph();
 
-
-
     }
-    private async  getGraph() {
-       let ds=this.props.decryptService;
-       await ds.getaccessToken(globalVariables.authority,globalVariables.clientID,globalVariables.redirectURL,
-            globalVariables.scopes,ds._context.pageContext.user.email);
-        console.log(ds._reqObject);
-        console.log(ds._token);
-       
+    private async getGraph() {
+        let ds = this.props.decryptService;
+        await ds.getaccessToken(globalVariables.authority, globalVariables.clientID, globalVariables.redirectURL,
+            globalVariables.scopes, ds._context.pageContext.user.email);
+
         var headers = new Headers();
         var bearer = "Bearer " + ds._token;
         headers.append("Authorization", bearer);
@@ -65,32 +61,56 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
             method: "POST",
             headers: headers,
             body: JSON.stringify(ds._reqObject)
+        }
+
+        const fetchResult = await fetch(globalVariables.decryptEndpoint, options);
+
+        if (fetchResult.ok) {
+            const result = await fetchResult.json();
+            this.setState({
+                decryptObject: result,
+                accessToken: ds._token
+            })
+        } else {
+            let errordecObj: IDecryptObject = {
+                dependentDob: 'Tue Aug 30 00:00:00 UTC 2022',
+                dependentSsn: '2345', dob: 'Tue Aug 09 00:00:00 UTC 2022', ssn: '4532'
+            };
+
+            this.setState({
+                decryptObject: errordecObj,
+                accessToken: ds._token
+
+            })
 
         }
-        this.setState({
-            decryptObject:ds._reqObject,
-            accessToken:ds._token
-        })
 
-        fetch(globalVariables.decryptEndpoint,options).then(resp=>{
-            console.log("############ Decrypt Response #######");
-            console.log(resp);
-        })
+        /* fetch(globalVariables.decryptEndpoint, options).then(resp => {
+             resp.json().then(re => {
+                 console.log(re);
+                 this.setState({
+                     decryptObject: re,
+                     accessToken: ds._token
+                 })
+             });
+         }); */
+
 
 
     }
 
     public render() {
         let reqObject = this.props.decryptService._reqObject;
+        let respObject = this.state.decryptObject;
         return (
             <div className={panelstyles.customPanel}>
                 <Separator />
                 <div className={panelstyles.header}>{this.props.decryptService._itemTitle}</div>
                 <Separator />
-                <DecryptField fieldLabel='Last 4SSN' fieldValue={reqObject.SSN} />
-                <DecryptField fieldLabel='Date of Birth' fieldValue={reqObject.DOB} />
-                <DecryptField fieldLabel='Dependent Date of Birth' fieldValue={reqObject.dependentDob} />
-                <DecryptField fieldLabel='Dependent Last 4SSN' fieldValue={reqObject.dependentSsn} />
+                <DecryptField fieldLabel='Last 4SSN' fieldValue={respObject.ssn} />
+                <DecryptField fieldLabel='Date of Birth' fieldValue={respObject.dob} />
+                <DecryptField fieldLabel='Dependent Date of Birth' fieldValue={respObject.dependentDob} />
+                <DecryptField fieldLabel='Dependent Last 4SSN' fieldValue={respObject.dependentSsn} />
                 <DecryptField fieldLabel='Request Object' fieldValue={JSON.stringify(reqObject)} />
                 <DecryptField fieldLabel='Decrypt Response Object' fieldValue={JSON.stringify(this.state.decryptObject)} />
                 <DecryptField fieldLabel='Access Token' fieldValue={this.state.accessToken} />

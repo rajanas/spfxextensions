@@ -1,7 +1,7 @@
-/*let globalVariables = {
-    authorityUrl: "https://login.microsoftonline.com/4c20a308-8b26-408c-9d08-b884a95f8b73",
+let globalVariables = {
+    authority: "https://login.microsoftonline.com/4c20a308-8b26-408c-9d08-b884a95f8b73",
     clientID: "c134bd2a-ffe5-4fea-8c87-d20de7f29754",
-    redirectURL: "https://aarainternationalinc.sharepoint.com/sites/socaledison/_layouts/15/workbench.aspx",
+    redirectURL: "https://aarainternationalinc.sharepoint.com/sites/socaledison/Lists/CCPA_HR/AllItems.aspx",
     scopes: "api://c134bd2a-ffe5-4fea-8c87-d20de7f29754/users.read",
 
     decryptEndpoint: 'https://apistcld.sce.com/sce/stb/v1/cpra/decrypt',
@@ -20,7 +20,7 @@
     field_dep_dob: "field_25"
 
 }
-*/
+/*
 let globalVariables = {
     authority: 'https://login.microsoftonline.com/5b2a8fee-4c95-4bdc-8aae-196f8aacb1b6',
     clientID: '4ec2eeab-b7f7-4567-8746-bc03558ff2be',
@@ -42,7 +42,7 @@ let globalVariables = {
     field_dep_ssn: "field_24",
     field_dep_dob: "field_25"
 }
-
+*/
 interface IReqObject {
     CPRARequestId: number,
     keyName: string,
@@ -52,5 +52,11 @@ interface IReqObject {
     dependentSsn: string,
     dependentDob: string
 }
+interface IDecryptObject{
+    dependentDob: string;
+    dependentSsn: string;
+    dob: string;
+    ssn: string;
+}
 
-export {globalVariables,IReqObject};
+export {globalVariables,IReqObject,IDecryptObject};
