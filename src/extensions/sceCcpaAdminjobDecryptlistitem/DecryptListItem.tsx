@@ -85,15 +85,7 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
 
         }
 
-        /* fetch(globalVariables.decryptEndpoint, options).then(resp => {
-             resp.json().then(re => {
-                 console.log(re);
-                 this.setState({
-                     decryptObject: re,
-                     accessToken: ds._token
-                 })
-             });
-         }); */
+      
 
 
 
@@ -102,6 +94,7 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
     public render() {
         let reqObject = this.props.decryptService._reqObject;
         let respObject = this.state.decryptObject;
+        
         return (
             <div className={panelstyles.customPanel}>
                 <Separator />
