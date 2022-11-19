@@ -63,8 +63,8 @@ export default class DecryptService {
         let intCols=this._columns;
         let field_ssn=intCols.get("Last4SSN");
          let field_dob=intCols.get("DateofBirth");
-         let field_dep_ssn=intCols.get("DependentDateofBirth");
-         let field_dep_dob=intCols.get("DependentLast4SSN");
+         let field_dep_ssn=intCols.get("DependentLast4SSN");
+         let field_dep_dob=intCols.get("DependentDateofBirth");
          console.log(intCols.get("DependentLast4SSNdfsdfsd"));
         
 

@@ -1,17 +1,13 @@
 import * as React from 'react';
-import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel";
 import { Separator } from "office-ui-fabric-react/lib/Separator";
-import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
-import {
-    BaseListViewCommandSet,
-    Command,
-    IListViewCommandSetExecuteEventParameters,
-    ListViewStateChangedEventArgs
-} from '@microsoft/sp-listview-extensibility';
-import { ExtensionContext } from '@microsoft/sp-extension-base';
+
 import panelstyles from './CustomPanel.module.scss';
 import { Label } from 'office-ui-fabric-react';
 import DecryptService, { IDecryptReqObject } from './services/DecryptService';
+
+import { objectDefinedNotNull, stringIsNullOrEmpty, } from "@pnp/core";
+
+
 
 import { globalVariables, IReqObject, IDecryptObject } from './services/Constants';
 
@@ -25,12 +21,17 @@ export interface IDecryptListItemState {
 }
 
 
-const DecryptField = (props: { fieldLabel: string; fieldValue: string }) => (
-    <div className={panelstyles.item} >
-        <Label className={panelstyles.fieldLabel}>{props.fieldLabel}</Label>
-        <Label>{props.fieldValue}</Label>
-    </div>
-);
+const DecryptField = (props: { fieldLabel: string; fieldValue: string }) => {
+    let fieldValue = (props.fieldValue === "0000" || props.fieldValue === new Date().toLocaleDateString() || stringIsNullOrEmpty(props.fieldValue));
+
+    return (
+        !fieldValue?        
+        <div className={panelstyles.item} >            
+            <Label className={panelstyles.fieldLabel}>{props.fieldLabel}</Label>
+            <Label>{props.fieldValue}</Label>
+        </div>:null
+    )
+};
 export default class DecryptListItem extends React.Component<IDecryptListItemProps, IDecryptListItemState> {
 
     constructor(props: IDecryptListItemProps) {
@@ -70,9 +71,12 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
                 accessToken: ds._token
             })
         } else {
+            let dt = new Date()
             let errordecObj: IDecryptObject = {
-                dependentDob: 'Tue Aug 30 00:00:00 UTC 2022',
-                dependentSsn: '2345', dob: 'Tue Aug 09 00:00:00 UTC 2022', ssn: '4532'
+                dependentDob: dt.toLocaleDateString(),
+                dependentSsn: '0000',
+                dob: dt.toLocaleDateString(),
+                ssn: '0000'
             };
 
             this.setState({
@@ -83,7 +87,7 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
 
         }
 
-      
+
 
 
 
@@ -92,19 +96,23 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
     public render() {
         let reqObject = this.props.decryptService._reqObject;
         let respObject = this.state.decryptObject;
-        let intCols=this.props.decryptService._columns;
-        
+        let intCols = this.props.decryptService._columns;
+        let dob = !objectDefinedNotNull(respObject.dob) ?  new Date().toLocaleDateString() : new Date(respObject.dob).toLocaleDateString();
+        let ssn = !objectDefinedNotNull(respObject.ssn) ? "0000" : respObject.ssn;
+        let depssn = !objectDefinedNotNull(respObject.dependentSsn) ? "0000" : respObject.dependentSsn;
+        let depdob = !objectDefinedNotNull(respObject.dependentDob) ?  new Date().toLocaleDateString() : new Date(respObject.dependentDob).toLocaleDateString();
+
         return (
             <div className={panelstyles.customPanel}>
                 <Separator />
                 <div className={panelstyles.header}>{this.props.decryptService._itemTitle}</div>
                 <Separator />
-                <DecryptField fieldLabel='Last 4SSN' fieldValue={respObject.ssn} />
-                <DecryptField fieldLabel='Date of Birth' fieldValue={respObject.dob} />
-                <DecryptField fieldLabel='Dependent Date of Birth' fieldValue={respObject.dependentDob} />
-                <DecryptField fieldLabel='Dependent Last 4SSN' fieldValue={respObject.dependentSsn} />
+                <DecryptField fieldLabel='Last 4SSN' fieldValue={ssn} />
+                <DecryptField fieldLabel='Date of Birth' fieldValue={dob} />
+                <DecryptField fieldLabel='Dependent Last 4SSN' fieldValue={depssn} />
+                <DecryptField fieldLabel='Dependent Date of Birth' fieldValue={depdob} />
                 <DecryptField fieldLabel='Request Object' fieldValue={JSON.stringify(reqObject)} />
-                <DecryptField fieldLabel='Decrypt Response Object' fieldValue={JSON.stringify(this.state.decryptObject)} />
+                <DecryptField fieldLabel='Decrypt Response Object' fieldValue={JSON.stringify(respObject)} />
                 <DecryptField fieldLabel='Access Token' fieldValue={this.state.accessToken} />
             </div>
         );
