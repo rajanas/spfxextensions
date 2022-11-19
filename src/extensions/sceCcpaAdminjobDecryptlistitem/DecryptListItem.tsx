@@ -42,14 +42,12 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
     }
 
     componentDidMount(): void {
-
         this.getGraph();
 
     }
     private async getGraph() {
         let ds = this.props.decryptService;
-        await ds.getaccessToken(globalVariables.authority, globalVariables.clientID, globalVariables.redirectURL,
-            globalVariables.scopes, ds._context.pageContext.user.email);
+        await ds.getaccessToken(ds._context.pageContext.user.email);
 
         var headers = new Headers();
         var bearer = "Bearer " + ds._token;
@@ -94,6 +92,7 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
     public render() {
         let reqObject = this.props.decryptService._reqObject;
         let respObject = this.state.decryptObject;
+        let intCols=this.props.decryptService._columns;
         
         return (
             <div className={panelstyles.customPanel}>

@@ -13,7 +13,6 @@ import { ExtensionContext } from '@microsoft/sp-extension-base';
 import { Dialog } from '@microsoft/sp-dialog';
 import { ICustomPanelProps, CustomPanel } from './CustomPanel';
 import DecryptService from './services/DecryptService';
-import {globalVariables,IReqObject} from './services/Constants';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -31,19 +30,17 @@ const LOG_SOURCE: string = 'SceCcpaAdminjobDecryptlistitemCommandSet';
 export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListViewCommandSet<ISceCcpaAdminjobDecryptlistitemCommandSetProperties> {
   private _panelPlaceHolder: HTMLDivElement = null;
   private  ds=new DecryptService();
-
-
-  public  onInit(): Promise<void> {
-    this.ds._context=this.context;
-    
- 
-    
   
+  public  onInit(): Promise<void> {  
+
+    this.ds._context=this.context;
+    this.ds.getInternalColumns();    
+    this.ds.getaccessToken(this.context.pageContext.user.email);
+
     Log.info(LOG_SOURCE, 'Initialized SceCcpaAdminjobDecryptlistitemCommandSet');
 
     // initial state of the command's visibility
-    
-    
+        
     const compareOneCommand: Command = this.tryGetCommand('DecryptItem');
     compareOneCommand.visible = false;
     /* let viewItems=this.context.listView.rows.length;
@@ -88,39 +85,16 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
     this.raiseOnChange();
   }
 
-  private decryptListItem(event:IListViewCommandSetExecuteEventParameters){
-    let listItem=event.itemId;
-    let list=this.context.listView.list;
-    let selectedItem=event.selectedRows[0];
-
-    let title=selectedItem.getValueByName("Title");
-    let fname=selectedItem.getValueByName("FirstName");
-    let lname=selectedItem.getValueByName("LastName");
-
-    Dialog.alert(title)
-
-    console.log(list);
-    console.log(listItem);
-    
-
-  }
+  
 
   private _showPanel = (event:IListViewCommandSetExecuteEventParameters,decryptService:DecryptService): void => {
+     let ds=this.ds;
+     ds.formatReqObject(event);
 
-    let reqObject={
-      CPRARequestId: 1,
-      keyName: "cpraSSNsce-20220721-00",
-      source: "sharepoint4",
-      SSN: event.selectedRows[0].getValueByName(globalVariables.field_ssn),
-      DOB:  event.selectedRows[0].getValueByName(globalVariables.field_dob),
-      dependentSsn:  event.selectedRows[0].getValueByName(globalVariables.field_dep_ssn),
-      dependentDob:  event.selectedRows[0].getValueByName(globalVariables.field_dep_dob)
-     };
-     this.ds._itemTitle=event.selectedRows[0].getValueByName('Title');
-     this.ds._reqObject=reqObject;
+
     this._renderPanelComponent({    
       isOpen: true,    
-      decryptService:this.ds
+      decryptService:ds
       
     });
   }

@@ -1,7 +1,14 @@
 import * as msal from "@azure/msal-browser";
-import { IReqObject } from "./Constants";
+import { IReqObject, globalVariables } from "./Constants";
 import { ExtensionContext } from '@microsoft/sp-extension-base';
-
+import {
+    BaseListViewCommandSet,
+    Command,
+    IListViewCommandSetExecuteEventParameters,
+    ListViewCommandSetContext,
+    ListViewStateChangedEventArgs
+} from '@microsoft/sp-listview-extensibility';
+import { Dictionary } from "lodash";
 export interface IDecryptReqObject {
     CPRARequestId: number,
     keyName: string;
@@ -12,23 +19,25 @@ export interface IDecryptReqObject {
     dependentDob: string;
 }
 export default class DecryptService {
-    public _token:string =null;
-    public _reqObject:IReqObject;
-    public _itemTitle:string;
-    public _context:ExtensionContext;
-   
+    public _token: string = null;
+    public _reqObject: IReqObject;
+    public _itemTitle: string;
+    public _context: ListViewCommandSetContext;
+    public _columns:Map<any,any>;
 
-    async getaccessToken(authorityUrl: string, clientID: string, redirectURL: string, scopes: string, currentUserEmail: string) {
+
+    async getaccessToken(currentUserEmail: string) {
+
         const msalConfig = {
             auth: {
-                authority: authorityUrl,
-                clientId: clientID,
-                redirectUri: redirectURL
+                authority: globalVariables.authority,
+                clientId: globalVariables.clientID,
+                redirectUri: globalVariables.redirectURL
             }
         };
 
         let silentRequest = {
-            scopes: [scopes],
+            scopes: [globalVariables.scopes],
             loginHint: currentUserEmail
         };
 
@@ -36,50 +45,45 @@ export default class DecryptService {
         const msalInstance = new msal.PublicClientApplication(msalConfig);
         let resp = await msalInstance.ssoSilent(silentRequest)
         let accToken = resp.accessToken;
-
-        this._token=accToken;
-       
+        this._token = accToken;
 
     }
 
-    async decriptResponseObject(reqObject: IDecryptReqObject, accessToken: string, decryptEndPoint: string) {
-        const graphConfig = {
-            graphMeEndpoint: 'https://apistcld.sce.com/sce/stb/v1/cpra/decrypt'
-          };
-      
-          let decObject={
+    getInternalColumns() {
+        let cols = this._context.listView.columns;
+        let intCol=new Map();
+        cols.map(col=>{
+            intCol.set(col.field.displayName,col.field.internalName)
+        })
+        this._columns=intCol;
+        
+    }
+
+    formatReqObject(event: IListViewCommandSetExecuteEventParameters) {
+        let intCols=this._columns;
+        let field_ssn=intCols.get("Last4SSN");
+         let field_dob=intCols.get("DateofBirth");
+         let field_dep_ssn=intCols.get("DependentDateofBirth");
+         let field_dep_dob=intCols.get("DependentLast4SSN");
+         console.log(intCols.get("DependentLast4SSNdfsdfsd"));
+        
+
+
+
+
+        let reqObject = {
             CPRARequestId: 1,
             keyName: "cpraSSNsce-20220721-00",
             source: "sharepoint4",
-            SSN: "QHCRV/1KHcUdlDfDGXpZ9g==",
-            DOB: "0bfjcI12jGeQrjXXrWgQ+Yc/LW6dF1cjXAJ0gh7flU4=",
-            dependentSsn: "Z+6J1aJOwuKotbSVGKldag==",
-            dependentDob: "eGlteMF784rlOo/UZajdQg5rsymmgfsO/usqtxzZY1E="
-           };
-      
-          var headers = new Headers();  
-          var bearer = "Bearer " + accessToken;            
-          headers.append("Authorization", bearer);  
-          headers.append("X-IBM-Client-Id", "d4d3b670ef4b617a6f7075e0f9d8d178");
-          headers.append("X-IBM-Client-Secret", "ff6a8d8e5be33587a5638f8b3212633b");
-          
-          var options:RequestInit = {  
-               method: "POST", 
-              
-               headers: headers,
-               body:JSON.stringify(reqObject)
-              
-               }            
-            
-                fetch(graphConfig.graphMeEndpoint, options)  
-                .then(function(response) {  
-                     //do something with response  
-                     var data  = response.json()  
-                     data.then(function(userinfo){  
-                        console.log("resp", userinfo)  
-                     })  
-                });
-
-
+            SSN: event.selectedRows[0].getValueByName(field_ssn),
+            DOB: event.selectedRows[0].getValueByName(field_dob),
+            dependentSsn: event.selectedRows[0].getValueByName(field_dep_ssn),
+            dependentDob: event.selectedRows[0].getValueByName(field_dep_dob)
+        };
+        this._itemTitle = event.selectedRows[0].getValueByName('Title');
+        this._reqObject = reqObject;
+        
+        console.log("#################  reqObject  ###########3")
+        console.log(reqObject)
     }
 }
