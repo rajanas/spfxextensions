@@ -8,7 +8,13 @@ import {
     ListViewCommandSetContext,
     ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
-import { Dictionary } from "lodash";
+import { spfi, SPFI, SPFx } from "@pnp/sp";
+import { Caching } from "@pnp/queryable";
+import { getSP } from "../services/pnpJsConfig";
+import "@pnp/sp/webs";
+import "@pnp/sp/lists";
+import { IList } from "@pnp/sp/lists";
+
 export interface IDecryptReqObject {
     CPRARequestId: number,
     keyName: string;
@@ -85,5 +91,13 @@ export default class DecryptService {
         
         console.log("#################  reqObject  ###########3")
         console.log(reqObject)
+    }
+
+    async getLists(){
+        const sp = spfi();
+
+          const lists = await sp.web.lists();
+          console.log(lists);
+
     }
 }

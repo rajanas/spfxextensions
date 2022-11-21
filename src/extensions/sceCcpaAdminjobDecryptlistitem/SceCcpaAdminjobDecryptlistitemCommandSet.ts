@@ -1,6 +1,6 @@
 import { Log } from '@microsoft/sp-core-library';
 import { IColor } from 'office-ui-fabric-react/lib/Color';
-
+import { spfi, SPFx } from "@pnp/sp";
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import {
@@ -13,6 +13,7 @@ import { ExtensionContext } from '@microsoft/sp-extension-base';
 import { Dialog } from '@microsoft/sp-dialog';
 import { ICustomPanelProps, CustomPanel } from './CustomPanel';
 import DecryptService from './services/DecryptService';
+import { getSP } from './services/pnpJsConfig';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -31,11 +32,13 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
   private _panelPlaceHolder: HTMLDivElement = null;
   private  ds=new DecryptService();
   
-  public  onInit(): Promise<void> {  
-
+  public async onInit(): Promise<void> {  
+    await super.onInit();
+   // getSP(this.context);
     this.ds._context=this.context;
     this.ds.getInternalColumns();    
     this.ds.getaccessToken(this.context.pageContext.user.email);
+   // this.ds.getLists();
 
     Log.info(LOG_SOURCE, 'Initialized SceCcpaAdminjobDecryptlistitemCommandSet');
 
