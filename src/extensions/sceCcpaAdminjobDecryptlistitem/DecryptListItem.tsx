@@ -7,8 +7,6 @@ import DecryptService, { IDecryptReqObject } from './services/DecryptService';
 
 import { objectDefinedNotNull, stringIsNullOrEmpty, } from "@pnp/core";
 
-
-
 import { globalVariables, IReqObject, IDecryptObject } from './services/Constants';
 
 export interface IDecryptListItemProps {
@@ -22,7 +20,8 @@ export interface IDecryptListItemState {
 
 
 const DecryptField = (props: { fieldLabel: string; fieldValue: string }) => {
-    let fieldValue = (props.fieldValue === "0000" || props.fieldValue === new Date().toLocaleDateString() || stringIsNullOrEmpty(props.fieldValue));
+    let fieldValue = (props.fieldValue === "0000" || props.fieldValue === new Date().toLocaleDateString()
+     || stringIsNullOrEmpty(props.fieldValue));
 
     return (
         !fieldValue?        

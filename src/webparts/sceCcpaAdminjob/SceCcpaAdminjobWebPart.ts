@@ -7,6 +7,10 @@ import {
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
+//import { getSP } from "../../extensions/sceCcpaAdminjobDecryptlistitem/services/pnpJsConfig" 
+import { sp } from "@pnp/sp";
+import "@pnp/sp/webs";
+import "@pnp/sp/lists";
 
 import * as strings from 'SceCcpaAdminjobWebPartStrings';
 import SceCcpaAdminjob from './components/SceCcpaAdminjob';
@@ -21,11 +25,12 @@ export interface ISceCcpaAdminjobWebPartProps {
 }
 
 export default class SceCcpaAdminjobWebPart extends BaseClientSideWebPart<ISceCcpaAdminjobWebPartProps> {
-
+ 
   private _isDarkTheme: boolean = false;
   private _environmentMessage: string = '';
 
   public render(): void {
+    sp.web.lists.get().then(lsts=>console.log(lsts));
     const element: React.ReactElement<ISceCcpaAdminjobProps> = React.createElement(
       SceCcpaAdminjob,
       {
@@ -47,10 +52,13 @@ export default class SceCcpaAdminjobWebPart extends BaseClientSideWebPart<ISceCc
     ReactDom.render(element, this.domElement);
   }
 
-  protected onInit(): Promise<void> {
+  protected async onInit(): Promise<void> {
     this._environmentMessage = this._getEnvironmentMessage();
+    await super.onInit();
 
-    return super.onInit();
+    sp.setup({
+      spfxContext: this.context as any
+    });
   }
 
   private _getEnvironmentMessage(): string {

@@ -8,12 +8,7 @@ import {
     ListViewCommandSetContext,
     ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
-import { spfi, SPFI, SPFx } from "@pnp/sp";
-import { Caching } from "@pnp/queryable";
-import { getSP } from "../services/pnpJsConfig";
-import "@pnp/sp/webs";
-import "@pnp/sp/lists";
-import { IList } from "@pnp/sp/lists";
+
 
 export interface IDecryptReqObject {
     CPRARequestId: number,
@@ -31,6 +26,10 @@ export default class DecryptService {
     public _context: ListViewCommandSetContext;
     public _columns:Map<any,any>;
 
+    constructor(context: ListViewCommandSetContext){
+        this._context=context;
+
+    }
 
     async getaccessToken(currentUserEmail: string) {
 
@@ -46,7 +45,6 @@ export default class DecryptService {
             scopes: [globalVariables.scopes],
             loginHint: currentUserEmail
         };
-
 
         const msalInstance = new msal.PublicClientApplication(msalConfig);
         let resp = await msalInstance.ssoSilent(silentRequest)
@@ -72,10 +70,6 @@ export default class DecryptService {
          let field_dep_ssn=intCols.get("DependentLast4SSN");
          let field_dep_dob=intCols.get("DependentDateofBirth");
          console.log(intCols.get("DependentLast4SSNdfsdfsd"));
-        
-
-
-
 
         let reqObject = {
             CPRARequestId: 1,
@@ -93,11 +87,9 @@ export default class DecryptService {
         console.log(reqObject)
     }
 
-    async getLists(){
-        const sp = spfi();
-
-          const lists = await sp.web.lists();
-          console.log(lists);
+    showDecryptCommand(){
+     console.log( this._context.listView.list)
 
     }
+
 }

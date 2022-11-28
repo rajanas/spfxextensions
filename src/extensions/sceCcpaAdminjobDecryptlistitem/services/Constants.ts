@@ -7,17 +7,11 @@ let globalVariables = {
     decryptEndpoint: 'https://apistcld.sce.com/sce/stb/v1/cpra/decrypt',
     CPRARequestId: 1,
     keyName: "cpraSSNsce-20220721-00",
-    source: "sharepoint4",
-    SSN: "QHCRV/1KHcUdlDfDGXpZ9g==",
-    DOB: "0bfjcI12jGeQrjXXrWgQ+Yc/LW6dF1cjXAJ0gh7flU4=",
-    dependentSsn: "Z+6J1aJOwuKotbSVGKldag==",
-    dependentDob: "eGlteMF784rlOo/UZajdQg5rsymmgfsO/usqtxzZY1E=",
+    source: "sharepoint4",   
     XIBM_ClientId: "d4d3b670ef4b617a6f7075e0f9d8d178",
     XIBM_ClientSecret: "ff6a8d8e5be33587a5638f8b3212633b",
-    field_ssn: "field_14",
-    field_dob: "field_16",
-    field_dep_ssn: "field_24",
-    field_dep_dob: "field_25"
+    ListNames:["CPRA_CS_Requestor","CCPA_HR"]
+    
 
 }
 /*

@@ -3,7 +3,6 @@ import styles from './SceCcpaAdminjob.module.scss';
 import { ISceCcpaAdminjobProps } from './ISceCcpaAdminjobProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import * as msal from "@azure/msal-browser";
-import { stringIsNullOrEmpty } from "@pnp/core";
 import { PrimaryButton,DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Separator } from 'office-ui-fabric-react/lib/Separator';

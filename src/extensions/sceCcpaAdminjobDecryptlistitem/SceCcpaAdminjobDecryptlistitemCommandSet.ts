@@ -1,6 +1,6 @@
 import { Log } from '@microsoft/sp-core-library';
 import { IColor } from 'office-ui-fabric-react/lib/Color';
-import { spfi, SPFx } from "@pnp/sp";
+
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import {
@@ -13,7 +13,6 @@ import { ExtensionContext } from '@microsoft/sp-extension-base';
 import { Dialog } from '@microsoft/sp-dialog';
 import { ICustomPanelProps, CustomPanel } from './CustomPanel';
 import DecryptService from './services/DecryptService';
-import { getSP } from './services/pnpJsConfig';
 
 /**
  * If your command set uses the ClientSideComponentProperties JSON input,
@@ -30,12 +29,12 @@ const LOG_SOURCE: string = 'SceCcpaAdminjobDecryptlistitemCommandSet';
 
 export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListViewCommandSet<ISceCcpaAdminjobDecryptlistitemCommandSetProperties> {
   private _panelPlaceHolder: HTMLDivElement = null;
-  private  ds=new DecryptService();
+  private  ds=new DecryptService(this.context);
   
   public async onInit(): Promise<void> {  
     await super.onInit();
-   // getSP(this.context);
-    this.ds._context=this.context;
+
+    
     this.ds.getInternalColumns();    
     this.ds.getaccessToken(this.context.pageContext.user.email);
    // this.ds.getLists();
@@ -72,6 +71,12 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
   }
 
   private _onListViewStateChanged = (args: ListViewStateChangedEventArgs): void => {
+    /*
+    const sp = spfi().using(SPFx(this.context));
+    
+    console.log(sp.web.lists);
+    console.log(sp.web.lists.getByTitle('CCPA_HR'));
+    */
    
     Log.info(LOG_SOURCE, 'List view state changed');   
 
