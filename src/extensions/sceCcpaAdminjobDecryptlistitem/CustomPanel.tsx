@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Panel, PanelType } from "office-ui-fabric-react/lib/Panel";
 
-import { Separator } from "office-ui-fabric-react/lib/Separator";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
 import panelstyles from './CustomPanel.module.scss';
 import DecryptListItem from './DecryptListItem';

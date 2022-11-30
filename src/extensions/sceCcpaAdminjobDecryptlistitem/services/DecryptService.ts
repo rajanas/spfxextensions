@@ -26,6 +26,10 @@ export default class DecryptService {
     public _context: ListViewCommandSetContext;
     public _columns: Map<any, any>;
 
+    constructor(context:ListViewCommandSetContext){
+        this._context=context;
+    }
+
 
 
     async getaccessToken(currentUserEmail: string) {
@@ -66,8 +70,7 @@ export default class DecryptService {
         let field_dob = intCols.get("DateofBirth");
         let field_dep_ssn = intCols.get("DependentLast4SSN");
         let field_dep_dob = intCols.get("DependentDateofBirth");
-        console.log(intCols.get("DependentLast4SSNdfsdfsd"));
-
+       
         let reqObject = {
             CPRARequestId: 1,
             keyName: "cpraSSNsce-20220721-00",

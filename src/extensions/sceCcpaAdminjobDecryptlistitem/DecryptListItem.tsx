@@ -14,21 +14,17 @@ export interface IDecryptListItemProps {
 }
 
 export interface IDecryptListItemState {
-    decryptObject: IDecryptObject;
+    decryptObject: IReqObject;
     accessToken: string;
 }
 
 
-const DecryptField = (props: { fieldLabel: string; fieldValue: string }) => {
-    let fieldValue = (props.fieldValue === "0000" || props.fieldValue === new Date().toLocaleDateString()
-     || stringIsNullOrEmpty(props.fieldValue));
-
-    return (
-        !fieldValue?        
+const DecryptField = (props: { fieldLabel: string; fieldValue: string }) => {   
+    return (              
         <div className={panelstyles.item} >            
             <Label className={panelstyles.fieldLabel}>{props.fieldLabel}</Label>
             <Label>{props.fieldValue}</Label>
-        </div>:null
+        </div>
     )
 };
 export default class DecryptListItem extends React.Component<IDecryptListItemProps, IDecryptListItemState> {
@@ -36,7 +32,7 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
     constructor(props: IDecryptListItemProps) {
         super(props);
         this.state = {
-            decryptObject: {} as IDecryptObject,
+            decryptObject: {} as IReqObject,
             accessToken: ""
         }
     }
@@ -71,12 +67,7 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
             })
         } else {
             let dt = new Date()
-            let errordecObj: IDecryptObject = {
-                dependentDob: dt.toLocaleDateString(),
-                dependentSsn: '0000',
-                dob: dt.toLocaleDateString(),
-                ssn: '0000'
-            };
+            let errordecObj: IReqObject = this.props.decryptService._reqObject;
 
             this.setState({
                 decryptObject: errordecObj,
@@ -96,10 +87,10 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
         let reqObject = this.props.decryptService._reqObject;
         let respObject = this.state.decryptObject;
         let intCols = this.props.decryptService._columns;
-        let dob = !objectDefinedNotNull(respObject.dob) ?  new Date().toLocaleDateString() : new Date(respObject.dob).toLocaleDateString();
-        let ssn = !objectDefinedNotNull(respObject.ssn) ? "0000" : respObject.ssn;
-        let depssn = !objectDefinedNotNull(respObject.dependentSsn) ? "0000" : respObject.dependentSsn;
-        let depdob = !objectDefinedNotNull(respObject.dependentDob) ?  new Date().toLocaleDateString() : new Date(respObject.dependentDob).toLocaleDateString();
+        let dob = respObject.DOB;
+        let ssn = respObject.SSN;
+        let depssn = respObject.dependentSsn;
+        let depdob = respObject.dependentDob;
 
         return (
             <div className={panelstyles.customPanel}>

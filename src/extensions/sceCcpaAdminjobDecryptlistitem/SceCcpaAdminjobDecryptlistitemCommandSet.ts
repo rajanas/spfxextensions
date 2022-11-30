@@ -1,6 +1,4 @@
 import { Log } from '@microsoft/sp-core-library';
-import { IColor } from 'office-ui-fabric-react/lib/Color';
-
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import {
@@ -9,8 +7,7 @@ import {
   IListViewCommandSetExecuteEventParameters,
   ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
-import { ExtensionContext } from '@microsoft/sp-extension-base';
-import { Dialog } from '@microsoft/sp-dialog';
+
 import { ICustomPanelProps, CustomPanel } from './CustomPanel';
 import DecryptService from './services/DecryptService';
 
@@ -29,13 +26,14 @@ const LOG_SOURCE: string = 'SceCcpaAdminjobDecryptlistitemCommandSet';
 
 export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListViewCommandSet<ISceCcpaAdminjobDecryptlistitemCommandSetProperties> {
   private _panelPlaceHolder: HTMLDivElement = null;
-  private  ds=new DecryptService();
+  private  ds:DecryptService;
   private showDecryptCommand:boolean=false;
   
   public async onInit(): Promise<void> {  
     await super.onInit();
+    this.ds=new DecryptService(this.context);
 
-    this.ds._context=this.context;
+   // this.ds._context=;
     this.ds.getInternalColumns();    
     this.ds.getaccessToken(this.context.pageContext.user.email);
     this.showDecryptCommand=this.ds.showDecryptCommand();
@@ -61,8 +59,7 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
   public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
     switch (event.itemId) {
       case 'DecryptItem':
-      // this.decryptListItem(event);   
-    
+      // this.decryptListItem(event);       
       this._showPanel(event,this.ds);       
         break;
       
@@ -72,12 +69,7 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
   }
 
   private _onListViewStateChanged = (args: ListViewStateChangedEventArgs): void => {
-    /*
-    const sp = spfi().using(SPFx(this.context));
-    
-    console.log(sp.web.lists);
-    console.log(sp.web.lists.getByTitle('CCPA_HR'));
-    */
+   
    
     Log.info(LOG_SOURCE, 'List view state changed');   
 
@@ -99,7 +91,6 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
   private _showPanel = (event:IListViewCommandSetExecuteEventParameters,decryptService:DecryptService): void => {
      let ds=this.ds;
      ds.formatReqObject(event);
-
 
     this._renderPanelComponent({    
       isOpen: true,    
