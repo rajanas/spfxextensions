@@ -29,15 +29,16 @@ const LOG_SOURCE: string = 'SceCcpaAdminjobDecryptlistitemCommandSet';
 
 export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListViewCommandSet<ISceCcpaAdminjobDecryptlistitemCommandSetProperties> {
   private _panelPlaceHolder: HTMLDivElement = null;
-  private  ds=new DecryptService(this.context);
+  private  ds=new DecryptService();
+  private showDecryptCommand:boolean=false;
   
   public async onInit(): Promise<void> {  
     await super.onInit();
 
-    
+    this.ds._context=this.context;
     this.ds.getInternalColumns();    
     this.ds.getaccessToken(this.context.pageContext.user.email);
-   // this.ds.getLists();
+    this.showDecryptCommand=this.ds.showDecryptCommand();
 
     Log.info(LOG_SOURCE, 'Initialized SceCcpaAdminjobDecryptlistitemCommandSet');
 
@@ -84,7 +85,7 @@ export default class SceCcpaAdminjobDecryptlistitemCommandSet extends BaseListVi
     if (compareOneCommand) {
       // This command should be hidden unless exactly one row is selected.
      
-     compareOneCommand.visible = this.context.listView.selectedRows?.length === 1;
+     compareOneCommand.visible =this.showDecryptCommand && this.context.listView.selectedRows?.length === 1;
     }
 
     // TODO: Add your logic here

@@ -24,12 +24,9 @@ export default class DecryptService {
     public _reqObject: IReqObject;
     public _itemTitle: string;
     public _context: ListViewCommandSetContext;
-    public _columns:Map<any,any>;
+    public _columns: Map<any, any>;
 
-    constructor(context: ListViewCommandSetContext){
-        this._context=context;
 
-    }
 
     async getaccessToken(currentUserEmail: string) {
 
@@ -55,21 +52,21 @@ export default class DecryptService {
 
     getInternalColumns() {
         let cols = this._context.listView.columns;
-        let intCol=new Map();
-        cols.map(col=>{
-            intCol.set(col.field.displayName,col.field.internalName)
+        let intCol = new Map();
+        cols.map(col => {
+            intCol.set(col.field.displayName, col.field.internalName)
         })
-        this._columns=intCol;
-        
+        this._columns = intCol;
+
     }
 
     formatReqObject(event: IListViewCommandSetExecuteEventParameters) {
-        let intCols=this._columns;
-        let field_ssn=intCols.get("Last4SSN");
-         let field_dob=intCols.get("DateofBirth");
-         let field_dep_ssn=intCols.get("DependentLast4SSN");
-         let field_dep_dob=intCols.get("DependentDateofBirth");
-         console.log(intCols.get("DependentLast4SSNdfsdfsd"));
+        let intCols = this._columns;
+        let field_ssn = intCols.get("Last4SSN");
+        let field_dob = intCols.get("DateofBirth");
+        let field_dep_ssn = intCols.get("DependentLast4SSN");
+        let field_dep_dob = intCols.get("DependentDateofBirth");
+        console.log(intCols.get("DependentLast4SSNdfsdfsd"));
 
         let reqObject = {
             CPRARequestId: 1,
@@ -82,13 +79,17 @@ export default class DecryptService {
         };
         this._itemTitle = event.selectedRows[0].getValueByName('Title');
         this._reqObject = reqObject;
-        
+
         console.log("#################  reqObject  ###########3")
         console.log(reqObject)
     }
 
-    showDecryptCommand(){
-     console.log( this._context.listView.list)
+    showDecryptCommand(): boolean {
+        let lstNames = globalVariables.ListNames;
+        let lstTitle = this._context.listView.list.title;
+        console.log(lstTitle);
+        return (lstNames.indexOf(lstTitle) !== -1)
+
 
     }
 
