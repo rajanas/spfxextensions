@@ -11,6 +11,7 @@ import { objectDefinedNotNull, stringIsNullOrEmpty, } from "@pnp/core";
 import { globalVariables, IReqObject, IDecryptObject } from './services/Constants';
 import { isEmpty } from '@microsoft/sp-lodash-subset';
 import { isDate, isUndefined } from 'lodash';
+import { disableBodyScroll } from 'office-ui-fabric-react';
 
 export interface IDecryptListItemProps {
     decryptService: DecryptService;
@@ -77,9 +78,16 @@ export default class DecryptListItem extends React.Component<IDecryptListItemPro
         const fetchResult = await fetch(globalVariables.decryptEndpoint, options);
 
         if (fetchResult.ok) {
-            const result = await fetchResult.json();
+            const result:IDecryptObject = await fetchResult.json();
+            let respObj=this.props.decryptService._reqObject;
+             respObj.DOB=result.dob;
+             respObj.SSN=result.ssn;
+             respObj.dependentDob=result.dependentDob;
+             respObj.dependentSsn=result.dependentSsn;
+
+
             this.setState({
-                decryptObject: result,
+                decryptObject: respObj,
                 accessToken: ds._token
             })
         } else {
