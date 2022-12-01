@@ -9,7 +9,6 @@ import {
     ListViewStateChangedEventArgs
 } from '@microsoft/sp-listview-extensibility';
 
-
 export interface IDecryptReqObject {
     CPRARequestId: number,
     keyName: string;
@@ -29,8 +28,6 @@ export default class DecryptService {
     constructor(context:ListViewCommandSetContext){
         this._context=context;
     }
-
-
 
     async getaccessToken(currentUserEmail: string) {
 
